@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeponList</title>
+</head>
+<body>
+<div id="app">
+
+  <select v-model="selected">
+    <option v-for="option in options" v-bind:value="option.value">
+      {{option.text}}
+    </option>
+  </select>
+
+  <button v-on:click="sort='昇順'">昇順</button>
+  <button v-on:click="sort='降順'">降順</button>
+
+
+  <select v-model="point">
+    <option v-for="opt in opts" v-bind:value="opt.value">
+      {{opt.text}}
+    </option>
+  </select>
+
+  <!-- <div v-for="p in sortedWeapons">
+    {{p}}
+  </div>  -->
+
+  <table border="1" style="border-collapse: collapse">
+    <thead></thead>
+    <tbody>
+      <th>武器名</th>
+      <th>種類</th>
+      <th>レア度</th>
+      <th>威力</th>
+      <th>使いやすさ</th>
+      <th>入手方法</th>
+      <tr v-for="weapon in (sortedWeapons,matched)" >
+        <th><font color="blue">{{weapon.name}}</font></th>
+        <td>{{weapon.type}}</td>
+        <td align="center">{{weapon.rare}}</td>
+        <td align="center">{{weapon.state}}</td>
+        <td>{{weapon.use}}</td>
+        <td>{{weapon.how}}</td>
+      </tr>
+    </tbody>
+    <tfoot></tfoot>
+  </table>
+
+</div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+    data: {
+      weapons:[
+      {
+        name: 'KN-44',
+        rare: 3,
+        state: 57,
+        type: 'アサルト',
+        use: '強い',
+        how: '所持',
+      },
+      {
+        name: 'PDW-57',
+        rare: 4,
+        state: 90,
+        type: 'SMG',
+        use: '使いやすい',
+        how: '',
+      },      
+      {
+        name: 'RPD',
+        rare: 1,
+        state: 65,
+        type: 'LMG',
+        use: '使ったことない',
+        how: '',
+      },
+      {
+        name: 'Outlaw',
+        rare: 1,
+        state: 84,
+        type: 'スナイパー',
+        use: '弱いっぽい',
+        how: '',
+      },
+      {
+        name: 'Chopper',
+        rare: 1,
+        state: 65,
+        type: 'LMG',
+        use: 'おすすめ',
+        how: '現在入手不可',
+      },    
+      {
+      name: 'M4LMG',
+      rare: 3,
+      state: 60,
+      type: 'LMG',
+      use: '割と使える',
+      how: '所持',
+      },
+      {
+      name: 'BY15',
+      rare: 3,
+      state: 90,
+      type: 'ショットガン',
+      use: '近距離つよい',
+      how: '',
+      },
+      {
+      name: 'Arctic .50',
+      rare: 3,
+      state: 85,
+      type: 'スナイパー',
+      use: '連射できる',
+      how: '',
+      },
+      {
+      name: 'DL Q33',
+      rare: 1,
+      state: 90,
+      type: 'スナイパー',
+      use: '1発で倒しやすい',
+      how: '',
+      },
+      {
+      name: 'M4',
+      rare: 1,
+      state: 45,
+      type: 'アサルト',
+      use: 'アプデで使いやすくなったらしい',
+      how: '初期武器',
+      },
+      {
+      name: 'Man-O-War',
+      rare: 1,
+      state: 75,
+      type: 'アサルト',
+      use: '威力が高いが発射間隔が長い',
+      how: '',
+      },
+      {
+      name: 'Striker',
+      rare: 1,
+      state: 79,
+      type: 'ショットガン',
+      use: '連射できる',
+      how: '',
+      },
+      {
+      name: 'DR-H',
+      rare: 1,
+      state: 71,
+      type: 'アサルト',
+      use: '強いらしい',
+      how: 'シーズン8バトルパスLV21,~8/5',
+      },
+      {
+      name: 'Pharo',
+      rare: 3,
+      state: 77,
+      type: 'SMG',
+      use: '近距離一瞬で倒せる',
+      how: '',
+      },
+      {
+      name: 'RUS-79U',
+      rare: 1,
+      state: 78,
+      type: 'SMG',
+      use: '使いやすい、中距離もある程度対応できる',
+      how: '',
+      },
+      ],
+
+      sort: '降順',
+      point: '',
+      opts:[
+        { text: '武器種',value:''},
+        { text: 'アサルト',value: 'アサルト'},
+        { text: 'SMG',value: 'SMG'},
+        { text: 'スナイパー',value: 'スナイパー'},
+        { text: 'LMG',value: 'LMG'},
+        { text: 'ショットガン',value: 'ショットガン'},
+      ],
+      selected: 'rare',
+      options: [
+        { text: 'レア度', value: 'rare' },
+        { text: '威力', value: 'state' },
+        { text: 'Three', value: 'C' }
+      ],
+
+    },
+
+    computed:{
+        sortedWeapons(){
+          console.log([this.selected, this.sort])
+          // ここではthis.selectedが読み込める
+          // const weapons = this.weapons.slice()
+          const selected = this.selected
+          const weapons = this.weapons
+          weapons.sort(
+            function(a, b) {
+              //console.log([a[this.selected], b[this.selected]])
+              // ここでthis.selectedが読み込めなくなる
+              console.log(b[selected],a[selected])
+            return b[selected]-a[selected]
+            }
+          )
+          //console.dir(weapons)
+
+          if (this.sort == '降順') {
+            // console.log('d')
+            return weapons
+          } else {
+            // console.log('u')
+            //return a[this.selected]-b[this.selected]
+            return weapons.reverse()
+          }
+          
+        },
+
+        matched(){
+          return this.weapons.filter(function(el) {
+            if(this.point == 'アサルト'){
+             return el.type == 'アサルト'
+            }
+            else if(this.point == 'SMG'){
+              return el.type == 'SMG'
+            }
+            else if(this.point == 'スナイパー'){
+              return el.type == 'スナイパー'
+            }
+            else if(this.point == 'LMG'){
+              return el.type == 'LMG'
+            }
+            else if(this.point == 'ショットガン'){
+              return el.type == 'ショットガン'
+            }
+            else{
+              return el.state >= 0
+            }
+        }, this)
+      },
+
+     },
+
+    })
+
+</script>
+
+</body>
+</html>
